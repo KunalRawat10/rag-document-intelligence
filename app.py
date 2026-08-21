@@ -24,9 +24,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ============================================================================
-# AESTHETIC OVERHAUL — Premium Quantum Cyber-Slate & Neon HUD
-# ============================================================================
+# Custom Quantum Cyber-Slate & Neon HUD Styling
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
@@ -40,7 +38,6 @@ st.markdown("""
         font-family: 'JetBrains Mono', monospace !important;
     }
 
-    /* ── Deep Space Canvas with Aurora & Grid ── */
     .stApp {
         background-color: #03040a !important;
         background-image: 
@@ -52,7 +49,6 @@ st.markdown("""
         background-size: 100% 100%, 100% 100%, 100% 100%, 50px 50px, 50px 50px !important;
     }
 
-    /* ── Sidebar: Titanium Glassmorphism ── */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, rgba(10, 14, 28, 0.92) 0%, rgba(6, 8, 18, 0.95) 100%) !important;
         backdrop-filter: blur(24px) saturate(1.4) !important;
@@ -64,13 +60,11 @@ st.markdown("""
         padding-top: 1.5rem !important;
     }
 
-    /* ── Typography ── */
     h1, h2, h3, h4 {
         font-family: 'Inter', sans-serif !important;
         letter-spacing: -0.02em !important;
     }
 
-    /* ── Hero Title with Shimmer ── */
     .cyber-title {
         font-size: 2.6rem;
         font-weight: 900;
@@ -97,7 +91,6 @@ st.markdown("""
         letter-spacing: 0.01em;
     }
 
-    /* ── HUD Cards: Floating Glass Panels ── */
     .hud-card {
         background: linear-gradient(145deg, rgba(15, 23, 42, 0.7) 0%, rgba(10, 15, 30, 0.85) 100%);
         border: 1px solid rgba(99, 102, 241, 0.15);
@@ -132,7 +125,6 @@ st.markdown("""
         transform: translateY(-1px);
     }
 
-    /* ── Citation Cards: Neon Edge Glow ── */
     .citation-card {
         background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 30, 0.75) 100%);
         border: 1px solid rgba(56, 189, 248, 0.12);
@@ -152,7 +144,6 @@ st.markdown("""
         box-shadow: 0 6px 24px rgba(14, 165, 233, 0.1);
     }
 
-    /* ── Confidence Score Pill ── */
     .confidence-badge {
         display: inline-flex;
         align-items: center;
@@ -169,7 +160,6 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(6, 182, 212, 0.08);
     }
 
-    /* ── Cyber Buttons: Liquid Glow ── */
     .stButton > button {
         background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
         color: #a5b4fc !important;
@@ -196,7 +186,6 @@ st.markdown("""
         transform: translateY(0px);
     }
 
-    /* ── Telemetry Chip ── */
     .telemetry-chip {
         display: inline-block;
         background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(10, 15, 30, 0.95) 100%);
@@ -211,7 +200,6 @@ st.markdown("""
         letter-spacing: 0.01em;
     }
 
-    /* ── Status Badge: Pulsing Neon ── */
     .status-badge {
         display: inline-flex;
         align-items: center;
@@ -241,79 +229,6 @@ st.markdown("""
         50% { opacity: 0.6; transform: scale(0.85); }
     }
 
-    /* ── Chat Message Styling ── */
-    .stChatMessage {
-        background: transparent !important;
-    }
-
-    .stChatMessage [data-testid="stChatMessageAvatar"] {
-        filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2));
-    }
-
-    /* ── Input Field Styling ── */
-    .stChatInputContainer {
-        background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 15, 30, 0.9) 100%) !important;
-        border: 1px solid rgba(99, 102, 241, 0.15) !important;
-        border-radius: 14px !important;
-        box-shadow: 
-            0 4px 24px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
-        padding: 4px !important;
-    }
-
-    .stChatInputContainer:focus-within {
-        border-color: rgba(99, 102, 241, 0.35) !important;
-        box-shadow: 
-            0 4px 24px rgba(99, 102, 241, 0.1),
-            0 0 0 3px rgba(99, 102, 241, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
-    }
-
-    /* ── Sidebar Widgets ── */
-    section[data-testid="stSidebar"] .stSlider > div > div > div {
-        background: linear-gradient(90deg, #6366f1, #0ea5e9) !important;
-    }
-
-    section[data-testid="stSidebar"] .stTextInput > div > div {
-        background: rgba(15, 23, 42, 0.6) !important;
-        border: 1px solid rgba(99, 102, 241, 0.15) !important;
-        border-radius: 8px !important;
-    }
-
-    section[data-testid="stSidebar"] .stSelectbox > div > div {
-        background: rgba(15, 23, 42, 0.6) !important;
-        border: 1px solid rgba(99, 102, 241, 0.15) !important;
-        border-radius: 8px !important;
-    }
-
-    section[data-testid="stSidebar"] .stRadio > div {
-        background: transparent !important;
-    }
-
-    section[data-testid="stSidebar"] .stRadio label {
-        color: #94a3b8 !important;
-        font-size: 0.82rem !important;
-    }
-
-    /* ── Expander Styling ── */
-    .streamlit-expanderHeader {
-        background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 30, 0.7) 100%) !important;
-        border: 1px solid rgba(99, 102, 241, 0.1) !important;
-        border-radius: 10px !important;
-        font-size: 0.85rem !important;
-        font-weight: 600 !important;
-        color: #a5b4fc !important;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2) !important;
-    }
-
-    .streamlit-expanderContent {
-        background: rgba(10, 14, 28, 0.4) !important;
-        border: 1px solid rgba(99, 102, 241, 0.08) !important;
-        border-top: none !important;
-        border-radius: 0 0 10px 10px !important;
-    }
-
-    /* ── Info / Warning / Error Boxes ── */
     .stAlert {
         border-radius: 12px !important;
         border: 1px solid rgba(99, 102, 241, 0.12) !important;
@@ -325,7 +240,6 @@ st.markdown("""
         color: #cbd5e1 !important;
     }
 
-    /* ── File Uploader ── */
     .stFileUploader > div > div {
         background: linear-gradient(145deg, rgba(15, 23, 42, 0.5) 0%, rgba(10, 15, 30, 0.6) 100%) !important;
         border: 2px dashed rgba(99, 102, 241, 0.2) !important;
@@ -335,42 +249,6 @@ st.markdown("""
     .stFileUploader > div > div:hover {
         border-color: rgba(99, 102, 241, 0.4) !important;
         background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 30, 0.7) 100%) !important;
-    }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: rgba(10, 14, 28, 0.5);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #6366f1, #0ea5e9);
-        border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(180deg, #818cf8, #38bdf8);
-    }
-
-    /* ── Divider ── */
-    hr {
-        border: none !important;
-        height: 1px !important;
-        background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent) !important;
-        margin: 1.5rem 0 !important;
-    }
-
-    /* ── Section Labels ── */
-    section[data-testid="stSidebar"] .stMarkdown h3 {
-        color: #e2e8f0 !important;
-        font-size: 0.95rem !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.02em !important;
-        margin-bottom: 12px !important;
     }
 </style>
 """, unsafe_allow_html=True)
