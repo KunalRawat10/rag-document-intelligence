@@ -1,10 +1,9 @@
 """
-DocuMind RAG - Production Document Retrieval-Augmented Generation Engine
-========================================================================
+DocuMind RAG Studio - Quantum Neural Document Intelligence
+==========================================================
 Author: Kunal Rawat
-Tech Stack: Streamlit, Groq API, SentenceTransformers, NumPy Vector Store, PyPDF
-
-Pipeline: Document -> Chunking -> Vector Embeddings -> Semantic Retrieval -> LLM Reasoning
+Tech Stack: Streamlit, Groq API, SentenceTransformers, NumPy, PyPDF
+Theme: Neo-Cyber Iris & Light Glassmorphism
 """
 
 import os
@@ -19,127 +18,136 @@ from groq import Groq, RateLimitError, APIConnectionError, APIStatusError
 
 # Page Configuration
 st.set_page_config(
-    page_title="DocuMind RAG | Chat with Documents",
-    page_icon="📚",
+    page_title="DocuMind RAG | Neural Document Intelligence",
+    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Monochromatic Obsidian & Starfield Theme
+# Custom Light Glassmorphism & Cyber Styling
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+    :root {
+        --ink: #172033;
+        --muted: #65708a;
+        --paper: #fbfcff;
+        --surface: rgba(255, 255, 255, 0.78);
+        --line: rgba(94, 104, 140, 0.16);
+        --violet: #7357ff;
+        --cyan: #00b8d9;
+        --pink: #ff5caa;
+        --lime: #b8e44c;
+    }
 
     html, body, [class*="css"], .stApp {
-        font-family: 'Space Grotesk', -apple-system, sans-serif !important;
-        color: #f4f4f5 !important;
+        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        color: var(--ink) !important;
     }
-    
-    code, pre {
-        font-family: 'JetBrains Mono', monospace !important;
-    }
+
+    code, pre { font-family: 'Space Mono', monospace !important; }
 
     .stApp {
-        background-color: #000000 !important;
-        background-image: 
-            radial-gradient(1px 1px at 25px 35px, #ffffff 100%, transparent),
-            radial-gradient(1px 1px at 85px 130px, rgba(255,255,255,0.7) 100%, transparent),
-            radial-gradient(1.5px 1.5px at 170px 50px, #ffffff 100%, transparent),
-            radial-gradient(1px 1px at 260px 210px, rgba(255,255,255,0.5) 100%, transparent),
-            radial-gradient(2px 2px at 340px 280px, #ffffff 100%, transparent),
-            radial-gradient(1px 1px at 430px 90px, rgba(255,255,255,0.8) 100%, transparent),
-            radial-gradient(1.5px 1.5px at 510px 240px, #ffffff 100%, transparent);
-        background-size: 550px 550px !important;
+        background:
+            radial-gradient(circle at 8% 8%, rgba(255, 92, 170, .12), transparent 24%),
+            radial-gradient(circle at 94% 2%, rgba(0, 184, 217, .14), transparent 27%),
+            linear-gradient(135deg, #f8f9ff 0%, #ffffff 48%, #f7fbff 100%) !important;
+        background-attachment: fixed !important;
     }
 
-    .title-3d {
-        font-size: 2.2rem;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        color: #ffffff;
-        text-shadow: 0 1px 0 #52525b, 0 2px 0 #3f3f46, 0 4px 0 #18181b, 0 8px 24px rgba(255, 255, 255, 0.12);
-        margin-bottom: 2px;
-    }
-
-    .card-3d {
-        background: linear-gradient(180deg, #111113 0%, #080809 100%);
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
-        border-left: 1px solid rgba(255, 255, 255, 0.08);
-        border-right: 1px solid rgba(255, 255, 255, 0.04);
-        border-bottom: 1px solid #000000;
-        border-radius: 12px;
-        padding: 14px;
-        margin-bottom: 10px;
-        box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    }
-
-    .citation-box {
-        background: #09090b;
-        border: 1px solid #27272a;
-        border-left: 3px solid #6366f1;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 6px 0px;
-        font-size: 0.84rem;
-        color: #d4d4d8;
-    }
-
-    .stButton > button {
-        background: linear-gradient(180deg, #1f1f23 0%, #121215 100%) !important;
-        color: #f4f4f5 !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-right: 1px solid rgba(0, 0, 0, 0.5) !important;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.8) !important;
-        border-radius: 9px !important;
-        font-weight: 600 !important;
-        font-size: 0.88rem !important;
-        box-shadow: 0 4px 0 #09090b, 0 6px 14px rgba(0, 0, 0, 0.6) !important;
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: .24;
+        background-image: linear-gradient(rgba(115, 87, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(115, 87, 255, .035) 1px, transparent 1px);
+        background-size: 34px 34px;
+        mask-image: linear-gradient(to bottom, black, transparent 82%);
     }
 
     section[data-testid="stSidebar"] {
-        background: #050507 !important;
-        border-right: 1px solid #18181b !important;
+        background: rgba(250, 251, 255, .84) !important;
+        backdrop-filter: blur(24px) !important;
+        border-right: 1px solid var(--line) !important;
+        box-shadow: 12px 0 34px rgba(58, 68, 106, .07) !important;
     }
 
-    .status-badge {
+    section[data-testid="stSidebar"] > div { padding-top: 2rem !important; }
+    section[data-testid="stSidebar"] h3 { color: var(--ink) !important; letter-spacing: -.02em; }
+    section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] .stMarkdown p { color: var(--muted) !important; }
+
+    .cyber-title {
+        font-size: clamp(2.1rem, 4vw, 3.5rem);
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: -.065em;
+        background: linear-gradient(100deg, var(--ink) 10%, var(--violet) 48%, var(--pink) 92%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 1.3rem 0 .35rem;
+    }
+
+    .cyber-sub { color: var(--muted); font-size: 1rem; margin-bottom: 1.35rem; }
+
+    .hud-card, .citation-card {
+        background: var(--surface) !important;
+        backdrop-filter: blur(18px);
+        border: 1px solid var(--line) !important;
+        border-radius: 18px !important;
+        box-shadow: 0 12px 35px rgba(68, 77, 115, .08), inset 0 1px 0 rgba(255,255,255,.9) !important;
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease !important;
+    }
+
+    .hud-card { padding: 15px !important; margin-bottom: 11px !important; }
+    .hud-card:hover, .citation-card:hover { transform: translateY(-3px); border-color: rgba(115,87,255,.34) !important; box-shadow: 0 18px 38px rgba(68, 77, 115, .13) !important; }
+
+    .citation-card { border-left: 4px solid var(--cyan) !important; padding: 14px 17px !important; margin: 9px 0 !important; color: var(--ink) !important; }
+    .citation-card b { color: var(--ink) !important; }
+    .citation-card div[style*="color:#94a3b8"] { color: var(--muted) !important; }
+
+    .confidence-badge, .telemetry-chip {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        background: #09090b;
-        color: #d4d4d8;
-        padding: 5px 14px;
-        border-radius: 9999px;
-        font-size: 0.76rem;
-        font-weight: 600;
-        border: 1px solid #27272a;
-        margin-bottom: 16px;
+        gap: 5px;
+        background: rgba(184, 228, 76, .18) !important;
+        color: #547400 !important;
+        border: 1px solid rgba(120, 165, 27, .28) !important;
+        border-radius: 999px !important;
+        font-size: .72rem;
+        font-weight: 700;
+        font-family: 'Space Mono', monospace;
     }
+    .confidence-badge { padding: 4px 9px; }
+    .telemetry-chip { padding: 8px 15px; margin-top: 12px; box-shadow: 0 8px 20px rgba(88, 113, 20, .08); }
 
-    .status-dot {
-        width: 6px;
-        height: 6px;
-        background-color: #22c55e;
-        border-radius: 50%;
-        box-shadow: 0 0 8px #22c55e;
+    .stButton > button {
+        background: linear-gradient(105deg, var(--violet), #967cff) !important;
+        color: #fff !important;
+        border: 0 !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 8px 18px rgba(115,87,255,.22) !important;
+        transition: transform .2s ease, box-shadow .2s ease, filter .2s ease !important;
     }
+    .stButton > button:hover { transform: translateY(-2px) !important; filter: saturate(1.12) !important; box-shadow: 0 13px 25px rgba(115,87,255,.3) !important; }
+    .stButton > button:active { transform: translateY(0) scale(.985) !important; }
 
-    .telemetry-chip {
-        display: inline-block;
-        background: #09090b;
-        color: #a1a1aa;
-        padding: 6px 14px;
-        border-radius: 8px;
-        font-size: 0.8rem;
-        margin-top: 8px;
-        border: 1px solid #27272a;
+    .stTextInput input, .stSelectbox [data-baseweb="select"], .stTextArea textarea, .stFileUploader {
+        border-radius: 12px !important;
+        border-color: var(--line) !important;
+        background: rgba(255,255,255,.72) !important;
     }
+    .stChatInput { border-color: rgba(115,87,255,.28) !important; box-shadow: 0 10px 30px rgba(115,87,255,.10) !important; }
+    [data-testid="stAlert"] { border-radius: 14px !important; border: 1px solid var(--line) !important; box-shadow: 0 8px 24px rgba(68,77,115,.06); }
+    hr { border-color: var(--line) !important; }
 </style>
 """, unsafe_allow_html=True)
 
 
-# Load Embedding Model (Cached in memory)
-@st.cache_resource(show_spinner="Loading dense embedding model (all-MiniLM-L6-v2)...")
+# Load Dense Embedding Model
+@st.cache_resource(show_spinner="Initializing dense vector embedder...")
 def load_embedder():
     return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
@@ -147,7 +155,7 @@ def load_embedder():
 embedder = load_embedder()
 
 
-# Document Ingestion & Chunking Pipeline
+# Document Processing & Vector Search Helpers
 def extract_text_from_file(uploaded_file) -> str:
     """Extracts raw text from uploaded PDF or TXT files."""
     if uploaded_file.name.endswith(".pdf"):
@@ -163,7 +171,7 @@ def extract_text_from_file(uploaded_file) -> str:
 
 
 def chunk_text(text: str, chunk_size: int = 500, chunk_overlap: int = 100) -> List[Dict[str, str]]:
-    """Chunks documents using sliding window overlap with metadata preservation."""
+    """Chunks documents using a sliding window overlap."""
     chunks = []
     start = 0
     chunk_id = 0
@@ -184,14 +192,14 @@ def chunk_text(text: str, chunk_size: int = 500, chunk_overlap: int = 100) -> Li
 
 
 def build_vector_store(chunks: List[Dict[str, str]]) -> Tuple[np.ndarray, List[Dict[str, str]]]:
-    """Generates normalized dense vector embeddings for semantic similarity."""
+    """Generates normalized vector embeddings for cosine similarity retrieval."""
     texts = [c["text"] for c in chunks]
     embeddings = embedder.encode(texts, convert_to_numpy=True, normalize_embeddings=True)
     return embeddings, chunks
 
 
 def retrieve_top_k(query: str, embeddings: np.ndarray, chunks: List[Dict[str, str]], top_k: int = 3) -> List[Dict]:
-    """Performs cosine semantic search between query embedding and stored document vectors."""
+    """Cosine semantic search between query vector and stored document vectors."""
     query_vector = embedder.encode([query], convert_to_numpy=True, normalize_embeddings=True)[0]
     similarity_scores = np.dot(embeddings, query_vector)
     top_indices = np.argsort(similarity_scores)[::-1][:top_k]
@@ -218,16 +226,21 @@ if "query_count" not in st.session_state:
     st.session_state.query_count = 0
 
 
-# Sidebar Controls
+# Sidebar Navigation & Settings
 with st.sidebar:
-    st.markdown('<div class="status-badge"><span class="status-dot"></span> RAG PIPELINE ACTIVE</div>', unsafe_allow_html=True)
-    st.markdown("### ⚙️ Configuration")
+    st.markdown("""
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(0,184,217,0.12); color:#00b8d9; padding:4px 12px; border-radius:9999px; font-size:0.75rem; font-weight:700; border:1px solid rgba(0,184,217,0.3); margin-bottom:14px;">
+            <span style="width:6px; height:6px; background:#00b8d9; border-radius:50%;"></span>
+            NEURAL ENGINE ONLINE
+        </div>
+    """, unsafe_allow_html=True)
     
+    st.markdown("### ⚙️ System Config")
     api_key = st.text_input(
         "Groq API Key",
         type="password",
         placeholder="gsk_...",
-        help="Get your free API key at console.groq.com"
+        help="Obtain a free key at console.groq.com"
     )
     
     model_name = st.selectbox(
@@ -239,19 +252,26 @@ with st.sidebar:
         ],
         index=0
     )
-    
+
+    rag_mode = st.radio(
+        "RAG Shield Mode",
+        ["Strict Grounding (Zero Hallucination)", "Analytical Synthesis"],
+        index=0,
+        help="Strict mode will never guess outside provided document chunks."
+    )
+
     st.markdown("---")
-    st.markdown("### 📄 Document Ingestion")
+    st.markdown("### 📂 Ingest Knowledge Base")
     uploaded_file = st.file_uploader("Upload PDF or TXT Document", type=["pdf", "txt"])
-    
-    with st.expander("🎛️ Chunking & Retrieval Parameters", expanded=False):
-        chunk_size = st.slider("Chunk Size (Characters)", 200, 1000, 500, 50)
-        chunk_overlap = st.slider("Chunk Overlap (Characters)", 0, 300, 100, 20)
-        top_k = st.slider("Top-K Retrieved Chunks", 1, 6, 3, 1)
-        temperature = st.slider("LLM Temperature", 0.0, 1.0, 0.2, 0.05)
+
+    with st.expander("🎛️ Vector & Hyperparameters", expanded=False):
+        chunk_size = st.slider("Chunk Size", 200, 1000, 500, 50)
+        chunk_overlap = st.slider("Overlap", 0, 300, 100, 20)
+        top_k = st.slider("Top-K Citations", 1, 6, 3, 1)
+        temperature = st.slider("Temperature", 0.0, 1.0, 0.1 if "Strict" in rag_mode else 0.7, 0.05)
 
     if uploaded_file and (st.session_state.processed_filename != uploaded_file.name):
-        with st.spinner("Extracting text and computing vector embeddings..."):
+        with st.spinner("Extracting text and generating vector embeddings..."):
             raw_text = extract_text_from_file(uploaded_file)
             chunks = chunk_text(raw_text, chunk_size, chunk_overlap)
             vectors, chunks_metadata = build_vector_store(chunks)
@@ -259,27 +279,27 @@ with st.sidebar:
             st.session_state.vector_store = vectors
             st.session_state.doc_chunks = chunks_metadata
             st.session_state.processed_filename = uploaded_file.name
-            st.success(f"Indexed {len(chunks)} chunks into Vector DB!")
+            st.success(f"Indexed {len(chunks)} chunks into Vector Space!")
 
     st.markdown("---")
-    st.markdown("### 📊 Index Telemetry")
+    st.markdown("### 📊 Index HUD")
     col1, col2 = st.columns(2)
     with col1:
         st.markdown(f"""
-        <div class="card-3d">
-            <span style="font-size:0.72rem; color:#71717a; font-weight:600;">INDEXED CHUNKS</span><br>
-            <span style="font-size:1.25rem; font-weight:700; color:#fafafa;">{len(st.session_state.doc_chunks)}</span>
+        <div class="hud-card">
+            <span style="font-size:0.7rem; color:var(--muted); font-weight:700;">CHUNKS</span><br>
+            <span style="font-size:1.2rem; font-weight:800; color:var(--violet);">{len(st.session_state.doc_chunks)}</span>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
-        <div class="card-3d">
-            <span style="font-size:0.72rem; color:#71717a; font-weight:600;">QUERIES</span><br>
-            <span style="font-size:1.25rem; font-weight:700; color:#fafafa;">{st.session_state.query_count}</span>
+        <div class="hud-card">
+            <span style="font-size:0.7rem; color:var(--muted); font-weight:700;">QUERIES</span><br>
+            <span style="font-size:1.2rem; font-weight:800; color:var(--cyan);">{st.session_state.query_count}</span>
         </div>
         """, unsafe_allow_html=True)
 
-    if st.button("🗑️ Reset Chat & Knowledge Base", use_container_width=True):
+    if st.button("🗑️ Flush Vector Database", use_container_width=True):
         st.session_state.messages = []
         st.session_state.vector_store = None
         st.session_state.doc_chunks = []
@@ -288,30 +308,36 @@ with st.sidebar:
         st.rerun()
 
 
-# Main Header
-st.markdown('<div class="title-3d">📚 DOCUMIND | RAG ENGINE</div>', unsafe_allow_html=True)
+# Main View Header
+st.markdown('<div class="cyber-title">⚡ DOCUMIND RAG STUDIO</div>', unsafe_allow_html=True)
 st.markdown(
-    "<p style='color:#a1a1aa; font-size:0.95rem; margin-top:-4px; margin-bottom:20px;'>"
-    "Eliminate LLM hallucinations by grounding answers directly in your uploaded documents using dense vector embeddings."
-    "</p>",
+    '<div class="cyber-sub">Quantum semantic search & context-grounded LLM inference engine.</div>',
     unsafe_allow_html=True
 )
 
-# Display Active Document Banner
 if st.session_state.processed_filename:
-    st.info(f"📂 Active Knowledge Base: **{st.session_state.processed_filename}** ({len(st.session_state.doc_chunks)} searchable chunks)")
+    st.info(f"📂 Active Knowledge Base: **{st.session_state.processed_filename}** ({len(st.session_state.doc_chunks)} dense vectors indexed)")
 else:
-    st.warning("⚠️ No document indexed. Please upload a PDF or TXT file in the sidebar to activate RAG grounding.")
+    st.warning("⚠️ Knowledge base empty. Upload a PDF or TXT document in the sidebar to activate semantic grounding.")
 
-# Render Conversation History
+# Render Conversation Turns
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
         if "citations" in msg and msg["citations"]:
-            with st.expander("🔍 View Retrieved Context Snippets", expanded=False):
+            with st.expander("🔍 Semantic Context Citations & Cosine Scores", expanded=False):
                 for c in msg["citations"]:
+                    pct = max(0, min(100, int(c["score"] * 100)))
                     st.markdown(
-                        f'<div class="citation-box"><b>[Chunk {c["chunk"]["id"]}] Similarity Score: {c["score"]:.4f}</b><br>{c["chunk"]["text"]}</div>',
+                        f"""
+                        <div class="citation-card">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                                <b>Chunk #{c["chunk"]["id"]}</b>
+                                <span class="confidence-badge">Similarity: {c["score"]:.4f} ({pct}%)</span>
+                            </div>
+                            <div style="color:var(--muted); font-size:0.82rem;">{c["chunk"]["text"]}</div>
+                        </div>
+                        """,
                         unsafe_allow_html=True
                     )
 
@@ -325,8 +351,8 @@ def stream_text_chunks(raw_stream):
                 yield delta.content
 
 
-# Query Submission Pipeline
-user_query = st.chat_input("Ask a question grounded in your uploaded document...")
+# Query Input & Retrieval Execution
+user_query = st.chat_input("Ask a grounded question about your document...")
 
 if user_query:
     st.session_state.messages.append({"role": "user", "content": user_query})
@@ -346,26 +372,31 @@ if user_query:
             st.warning(err)
         st.session_state.messages.append({"role": "assistant", "content": err})
     else:
-        # Step 1: Semantic Retrieval
+        # Step 1: Semantic Vector Retrieval
         retrieval_start = time.time()
         retrieved_results = retrieve_top_k(user_query, st.session_state.vector_store, st.session_state.doc_chunks, top_k)
         retrieval_latency = round(time.time() - retrieval_start, 3)
 
-        # Step 2: Context Augmentation Prompt Engineering
+        # Step 2: Context Augmentation
         context_str = "\n\n".join([
-            f"--- Context Chunk {r['chunk']['id']} (Relevance Score: {r['score']:.3f}) ---\n{r['chunk']['text']}"
+            f"[Chunk #{r['chunk']['id']} | Cosine Match: {r['score']:.3f}]\n{r['chunk']['text']}"
             for r in retrieved_results
         ])
 
-        system_instruction = (
-            "You are a strict, grounded Retrieval-Augmented Generation (RAG) assistant. "
-            "Your task is to answer the user's question using ONLY the provided document context below.\n"
-            "Rules:\n"
-            "1. If the provided context does NOT contain enough information to answer, state: 'The provided document does not contain this information.' Do not hallucinate.\n"
-            "2. Cite the chunk IDs where relevant.\n"
-            "3. Keep answers clear, technical, and concise.\n\n"
-            f"Provided Document Context:\n{context_str}"
-        )
+        if "Strict" in rag_mode:
+            system_instruction = (
+                "You are an ultra-precise, hallucination-free RAG agent. "
+                "Answer the user's question using ONLY the retrieved document chunks below. "
+                "If the context does not provide sufficient proof to answer, state: "
+                "'I cannot find this information within the provided document.' Never make assumptions.\n\n"
+                f"Retrieved Context:\n{context_str}"
+            )
+        else:
+            system_instruction = (
+                "You are an advanced technical analyst. Answer the user's inquiry using the retrieved "
+                "document context as your primary source, providing reasoned synthesis where appropriate.\n\n"
+                f"Retrieved Context:\n{context_str}"
+            )
 
         # Step 3: LLM Inference
         client = Groq(api_key=effective_key)
@@ -390,17 +421,26 @@ if user_query:
                 st.session_state.query_count += 1
 
                 # Display Citations Expander
-                with st.expander("🔍 View Retrieved Context Snippets", expanded=False):
+                with st.expander("🔍 Semantic Context Citations & Cosine Scores", expanded=False):
                     for c in retrieved_results:
+                        pct = max(0, min(100, int(c["score"] * 100)))
                         st.markdown(
-                            f'<div class="citation-box"><b>[Chunk {c["chunk"]["id"]}] Similarity Score: {c["score"]:.4f}</b><br>{c["chunk"]["text"]}</div>',
+                            f"""
+                            <div class="citation-card">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                                    <b>Chunk #{c["chunk"]["id"]}</b>
+                                    <span class="confidence-badge">Similarity: {c["score"]:.4f} ({pct}%)</span>
+                                </div>
+                                <div style="color:var(--muted); font-size:0.82rem;">{c["chunk"]["text"]}</div>
+                            </div>
+                            """,
                             unsafe_allow_html=True
                         )
 
                 st.markdown(
                     f'<div class="telemetry-chip">⚡ Retrieval: <b>{retrieval_latency}s</b> | '
-                    f'Inference: <b>{inference_latency}s</b> | '
-                    f'Top-K Chunks: <b>{len(retrieved_results)}</b></div>',
+                    f'🤖 Generation: <b>{inference_latency}s</b> | '
+                    f'📚 Top-K: <b>{len(retrieved_results)}</b></div>',
                     unsafe_allow_html=True
                 )
 
@@ -411,7 +451,7 @@ if user_query:
                 })
 
             except RateLimitError:
-                err = "Rate limit reached on Groq API. Please wait a few moments."
+                err = "Groq API rate limit reached. Please wait a moment."
                 st.warning(err)
                 st.session_state.messages.append({"role": "assistant", "content": err})
             except APIConnectionError:
