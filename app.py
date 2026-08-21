@@ -3,7 +3,7 @@ DocuMind RAG Studio - Quantum Neural Document Intelligence
 ==========================================================
 Author: Kunal Rawat
 Tech Stack: Streamlit, Groq API, SentenceTransformers, NumPy, PyPDF
-Theme: Neo-Cyber Iris & Light Glassmorphism
+Theme: Quantum Cyber-Slate & Neon HUD
 """
 
 import os
@@ -24,130 +24,360 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Light Glassmorphism & Cyber Styling
+# ============================================================================
+# AESTHETIC OVERHAUL — Premium Quantum Cyber-Slate & Neon HUD
+# ============================================================================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-
-    :root {
-        --ink: #172033;
-        --muted: #65708a;
-        --paper: #fbfcff;
-        --surface: rgba(255, 255, 255, 0.78);
-        --line: rgba(94, 104, 140, 0.16);
-        --violet: #7357ff;
-        --cyan: #00b8d9;
-        --pink: #ff5caa;
-        --lime: #b8e44c;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
     html, body, [class*="css"], .stApp {
-        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-        color: var(--ink) !important;
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        color: #e2e8f0 !important;
     }
 
-    code, pre { font-family: 'Space Mono', monospace !important; }
+    code, pre {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
 
+    /* ── Deep Space Canvas with Aurora & Grid ── */
     .stApp {
-        background:
-            radial-gradient(circle at 8% 8%, rgba(255, 92, 170, .12), transparent 24%),
-            radial-gradient(circle at 94% 2%, rgba(0, 184, 217, .14), transparent 27%),
-            linear-gradient(135deg, #f8f9ff 0%, #ffffff 48%, #f7fbff 100%) !important;
-        background-attachment: fixed !important;
+        background-color: #03040a !important;
+        background-image: 
+            radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(14, 165, 233, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.03) 0%, transparent 60%),
+            linear-gradient(to right, rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+        background-size: 100% 100%, 100% 100%, 100% 100%, 50px 50px, 50px 50px !important;
     }
 
-    .stApp::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        opacity: .24;
-        background-image: linear-gradient(rgba(115, 87, 255, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(115, 87, 255, .035) 1px, transparent 1px);
-        background-size: 34px 34px;
-        mask-image: linear-gradient(to bottom, black, transparent 82%);
-    }
-
+    /* ── Sidebar: Titanium Glassmorphism ── */
     section[data-testid="stSidebar"] {
-        background: rgba(250, 251, 255, .84) !important;
-        backdrop-filter: blur(24px) !important;
-        border-right: 1px solid var(--line) !important;
-        box-shadow: 12px 0 34px rgba(58, 68, 106, .07) !important;
+        background: linear-gradient(180deg, rgba(10, 14, 28, 0.92) 0%, rgba(6, 8, 18, 0.95) 100%) !important;
+        backdrop-filter: blur(24px) saturate(1.4) !important;
+        border-right: 1px solid rgba(99, 102, 241, 0.12) !important;
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.03) !important;
     }
 
-    section[data-testid="stSidebar"] > div { padding-top: 2rem !important; }
-    section[data-testid="stSidebar"] h3 { color: var(--ink) !important; letter-spacing: -.02em; }
-    section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] .stMarkdown p { color: var(--muted) !important; }
+    section[data-testid="stSidebar"] > div {
+        padding-top: 1.5rem !important;
+    }
 
+    /* ── Typography ── */
+    h1, h2, h3, h4 {
+        font-family: 'Inter', sans-serif !important;
+        letter-spacing: -0.02em !important;
+    }
+
+    /* ── Hero Title with Shimmer ── */
     .cyber-title {
-        font-size: clamp(2.1rem, 4vw, 3.5rem);
-        line-height: 1.02;
-        font-weight: 800;
-        letter-spacing: -.065em;
-        background: linear-gradient(100deg, var(--ink) 10%, var(--violet) 48%, var(--pink) 92%);
+        font-size: 2.6rem;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 30%, #38bdf8 60%, #818cf8 100%);
+        background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin: 1.3rem 0 .35rem;
+        animation: shimmer 6s linear infinite;
+        margin-bottom: 4px;
+        line-height: 1.1;
     }
 
-    .cyber-sub { color: var(--muted); font-size: 1rem; margin-bottom: 1.35rem; }
-
-    .hud-card, .citation-card {
-        background: var(--surface) !important;
-        backdrop-filter: blur(18px);
-        border: 1px solid var(--line) !important;
-        border-radius: 18px !important;
-        box-shadow: 0 12px 35px rgba(68, 77, 115, .08), inset 0 1px 0 rgba(255,255,255,.9) !important;
-        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease !important;
+    @keyframes shimmer {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
     }
 
-    .hud-card { padding: 15px !important; margin-bottom: 11px !important; }
-    .hud-card:hover, .citation-card:hover { transform: translateY(-3px); border-color: rgba(115,87,255,.34) !important; box-shadow: 0 18px 38px rgba(68, 77, 115, .13) !important; }
+    .cyber-sub {
+        color: #64748b;
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 28px;
+        letter-spacing: 0.01em;
+    }
 
-    .citation-card { border-left: 4px solid var(--cyan) !important; padding: 14px 17px !important; margin: 9px 0 !important; color: var(--ink) !important; }
-    .citation-card b { color: var(--ink) !important; }
-    .citation-card div[style*="color:#94a3b8"] { color: var(--muted) !important; }
+    /* ── HUD Cards: Floating Glass Panels ── */
+    .hud-card {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.7) 0%, rgba(10, 15, 30, 0.85) 100%);
+        border: 1px solid rgba(99, 102, 241, 0.15);
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06),
+            0 0 0 1px rgba(255, 255, 255, 0.02);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
 
-    .confidence-badge, .telemetry-chip {
+    .hud-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
+    }
+
+    .hud-card:hover {
+        border-color: rgba(99, 102, 241, 0.35);
+        box-shadow: 
+            0 12px 40px rgba(99, 102, 241, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 0 0 1px rgba(255, 255, 255, 0.03);
+        transform: translateY(-1px);
+    }
+
+    /* ── Citation Cards: Neon Edge Glow ── */
+    .citation-card {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 30, 0.75) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.12);
+        border-left: 3px solid #0ea5e9;
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin: 10px 0px;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        transition: all 0.25s ease;
+    }
+
+    .citation-card:hover {
+        border-left-color: #38bdf8;
+        border-color: rgba(56, 189, 248, 0.25);
+        box-shadow: 0 6px 24px rgba(14, 165, 233, 0.1);
+    }
+
+    /* ── Confidence Score Pill ── */
+    .confidence-badge {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        background: rgba(184, 228, 76, .18) !important;
-        color: #547400 !important;
-        border: 1px solid rgba(120, 165, 27, .28) !important;
-        border-radius: 999px !important;
-        font-size: .72rem;
+        gap: 6px;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+        color: #67e8f9;
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        padding: 3px 10px;
+        border-radius: 8px;
+        font-size: 0.72rem;
         font-weight: 700;
-        font-family: 'Space Mono', monospace;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.02em;
+        box-shadow: 0 2px 8px rgba(6, 182, 212, 0.08);
     }
-    .confidence-badge { padding: 4px 9px; }
-    .telemetry-chip { padding: 8px 15px; margin-top: 12px; box-shadow: 0 8px 20px rgba(88, 113, 20, .08); }
 
+    /* ── Cyber Buttons: Liquid Glow ── */
     .stButton > button {
-        background: linear-gradient(105deg, var(--violet), #967cff) !important;
-        color: #fff !important;
-        border: 0 !important;
-        border-radius: 12px !important;
-        font-weight: 700 !important;
-        box-shadow: 0 8px 18px rgba(115,87,255,.22) !important;
-        transition: transform .2s ease, box-shadow .2s ease, filter .2s ease !important;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(14, 165, 233, 0.12) 100%) !important;
+        color: #a5b4fc !important;
+        border: 1px solid rgba(99, 102, 241, 0.25) !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        font-size: 0.88rem !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 12px rgba(99, 102, 241, 0.08) !important;
     }
-    .stButton > button:hover { transform: translateY(-2px) !important; filter: saturate(1.12) !important; box-shadow: 0 13px 25px rgba(115,87,255,.3) !important; }
-    .stButton > button:active { transform: translateY(0) scale(.985) !important; }
 
-    .stTextInput input, .stSelectbox [data-baseweb="select"], .stTextArea textarea, .stFileUploader {
-        border-radius: 12px !important;
-        border-color: var(--line) !important;
-        background: rgba(255,255,255,.72) !important;
+    .stButton > button:hover {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.28) 0%, rgba(14, 165, 233, 0.28) 100%) !important;
+        border-color: rgba(165, 180, 252, 0.5) !important;
+        color: #ffffff !important;
+        box-shadow: 
+            0 0 24px rgba(99, 102, 241, 0.25),
+            0 0 48px rgba(14, 165, 233, 0.1) !important;
+        transform: translateY(-1px);
     }
-    .stChatInput { border-color: rgba(115,87,255,.28) !important; box-shadow: 0 10px 30px rgba(115,87,255,.10) !important; }
-    [data-testid="stAlert"] { border-radius: 14px !important; border: 1px solid var(--line) !important; box-shadow: 0 8px 24px rgba(68,77,115,.06); }
-    hr { border-color: var(--line) !important; }
+
+    .stButton > button:active {
+        transform: translateY(0px);
+    }
+
+    /* ── Telemetry Chip ── */
+    .telemetry-chip {
+        display: inline-block;
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(10, 15, 30, 0.95) 100%);
+        color: #64748b;
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        margin-top: 12px;
+        border: 1px solid rgba(99, 102, 241, 0.12);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        letter-spacing: 0.01em;
+    }
+
+    /* ── Status Badge: Pulsing Neon ── */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+        color: #22d3ee;
+        padding: 5px 14px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border: 1px solid rgba(34, 211, 238, 0.25);
+        box-shadow: 0 0 12px rgba(6, 182, 212, 0.1);
+        letter-spacing: 0.04em;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background: #22d3ee;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #22d3ee, 0 0 16px rgba(34, 211, 238, 0.4);
+        animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    /* ── Chat Message Styling ── */
+    .stChatMessage {
+        background: transparent !important;
+    }
+
+    .stChatMessage [data-testid="stChatMessageAvatar"] {
+        filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2));
+    }
+
+    /* ── Input Field Styling ── */
+    .stChatInputContainer {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.8) 0%, rgba(10, 15, 30, 0.9) 100%) !important;
+        border: 1px solid rgba(99, 102, 241, 0.15) !important;
+        border-radius: 14px !important;
+        box-shadow: 
+            0 4px 24px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+        padding: 4px !important;
+    }
+
+    .stChatInputContainer:focus-within {
+        border-color: rgba(99, 102, 241, 0.35) !important;
+        box-shadow: 
+            0 4px 24px rgba(99, 102, 241, 0.1),
+            0 0 0 3px rgba(99, 102, 241, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+    }
+
+    /* ── Sidebar Widgets ── */
+    section[data-testid="stSidebar"] .stSlider > div > div > div {
+        background: linear-gradient(90deg, #6366f1, #0ea5e9) !important;
+    }
+
+    section[data-testid="stSidebar"] .stTextInput > div > div {
+        background: rgba(15, 23, 42, 0.6) !important;
+        border: 1px solid rgba(99, 102, 241, 0.15) !important;
+        border-radius: 8px !important;
+    }
+
+    section[data-testid="stSidebar"] .stSelectbox > div > div {
+        background: rgba(15, 23, 42, 0.6) !important;
+        border: 1px solid rgba(99, 102, 241, 0.15) !important;
+        border-radius: 8px !important;
+    }
+
+    section[data-testid="stSidebar"] .stRadio > div {
+        background: transparent !important;
+    }
+
+    section[data-testid="stSidebar"] .stRadio label {
+        color: #94a3b8 !important;
+        font-size: 0.82rem !important;
+    }
+
+    /* ── Expander Styling ── */
+    .streamlit-expanderHeader {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 30, 0.7) 100%) !important;
+        border: 1px solid rgba(99, 102, 241, 0.1) !important;
+        border-radius: 10px !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #a5b4fc !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .streamlit-expanderContent {
+        background: rgba(10, 14, 28, 0.4) !important;
+        border: 1px solid rgba(99, 102, 241, 0.08) !important;
+        border-top: none !important;
+        border-radius: 0 0 10px 10px !important;
+    }
+
+    /* ── Info / Warning / Error Boxes ── */
+    .stAlert {
+        border-radius: 12px !important;
+        border: 1px solid rgba(99, 102, 241, 0.12) !important;
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.7) 0%, rgba(10, 15, 30, 0.8) 100%) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .stAlert [data-testid="stAlertContent"] {
+        color: #cbd5e1 !important;
+    }
+
+    /* ── File Uploader ── */
+    .stFileUploader > div > div {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.5) 0%, rgba(10, 15, 30, 0.6) 100%) !important;
+        border: 2px dashed rgba(99, 102, 241, 0.2) !important;
+        border-radius: 12px !important;
+    }
+
+    .stFileUploader > div > div:hover {
+        border-color: rgba(99, 102, 241, 0.4) !important;
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(10, 15, 30, 0.7) 100%) !important;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(10, 14, 28, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #6366f1, #0ea5e9);
+        border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #818cf8, #38bdf8);
+    }
+
+    /* ── Divider ── */
+    hr {
+        border: none !important;
+        height: 1px !important;
+        background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent) !important;
+        margin: 1.5rem 0 !important;
+    }
+
+    /* ── Section Labels ── */
+    section[data-testid="stSidebar"] .stMarkdown h3 {
+        color: #e2e8f0 !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
+        margin-bottom: 12px !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 
 # Load Dense Embedding Model
-@st.cache_resource(show_spinner="Initializing dense vector embedder...")
+@st.cache_resource(show_spinner="Initializing all-MiniLM-L6-v2 dense vector embedder...")
 def load_embedder():
     return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
@@ -229,8 +459,8 @@ if "query_count" not in st.session_state:
 # Sidebar Navigation & Settings
 with st.sidebar:
     st.markdown("""
-        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(0,184,217,0.12); color:#00b8d9; padding:4px 12px; border-radius:9999px; font-size:0.75rem; font-weight:700; border:1px solid rgba(0,184,217,0.3); margin-bottom:14px;">
-            <span style="width:6px; height:6px; background:#00b8d9; border-radius:50%;"></span>
+        <div class="status-badge" style="margin-bottom:18px;">
+            <span class="status-dot"></span>
             NEURAL ENGINE ONLINE
         </div>
     """, unsafe_allow_html=True)
@@ -287,15 +517,15 @@ with st.sidebar:
     with col1:
         st.markdown(f"""
         <div class="hud-card">
-            <span style="font-size:0.7rem; color:var(--muted); font-weight:700;">CHUNKS</span><br>
-            <span style="font-size:1.2rem; font-weight:800; color:var(--violet);">{len(st.session_state.doc_chunks)}</span>
+            <span style="font-size:0.7rem; color:#64748b; font-weight:700; letter-spacing:0.08em;">CHUNKS</span><br>
+            <span style="font-size:1.3rem; font-weight:800; color:#818cf8; letter-spacing:-0.02em;">{len(st.session_state.doc_chunks)}</span>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
         <div class="hud-card">
-            <span style="font-size:0.7rem; color:var(--muted); font-weight:700;">QUERIES</span><br>
-            <span style="font-size:1.2rem; font-weight:800; color:var(--cyan);">{st.session_state.query_count}</span>
+            <span style="font-size:0.7rem; color:#64748b; font-weight:700; letter-spacing:0.08em;">QUERIES</span><br>
+            <span style="font-size:1.3rem; font-weight:800; color:#38bdf8; letter-spacing:-0.02em;">{st.session_state.query_count}</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -316,7 +546,7 @@ st.markdown(
 )
 
 if st.session_state.processed_filename:
-    st.info(f"📂 Active Knowledge Base: **{st.session_state.processed_filename}** ({len(st.session_state.doc_chunks)} dense vectors indexed)")
+    st.info(f"📂 Active Knowledge Base: **{st.session_state.processed_filename}** ({len(st.session_state.doc_chunks)} dense vector vectors indexed)")
 else:
     st.warning("⚠️ Knowledge base empty. Upload a PDF or TXT document in the sidebar to activate semantic grounding.")
 
@@ -331,11 +561,11 @@ for msg in st.session_state.messages:
                     st.markdown(
                         f"""
                         <div class="citation-card">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                                <b>Chunk #{c["chunk"]["id"]}</b>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <b style="color:#e2e8f0; font-size:0.9rem;">Chunk #{c["chunk"]["id"]}</b>
                                 <span class="confidence-badge">Similarity: {c["score"]:.4f} ({pct}%)</span>
                             </div>
-                            <div style="color:var(--muted); font-size:0.82rem;">{c["chunk"]["text"]}</div>
+                            <div style="color:#94a3b8; font-size:0.82rem; line-height:1.5;">{c["chunk"]["text"]}</div>
                         </div>
                         """,
                         unsafe_allow_html=True
@@ -427,11 +657,11 @@ if user_query:
                         st.markdown(
                             f"""
                             <div class="citation-card">
-                                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                                    <b>Chunk #{c["chunk"]["id"]}</b>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <b style="color:#e2e8f0; font-size:0.9rem;">Chunk #{c["chunk"]["id"]}</b>
                                     <span class="confidence-badge">Similarity: {c["score"]:.4f} ({pct}%)</span>
                                 </div>
-                                <div style="color:var(--muted); font-size:0.82rem;">{c["chunk"]["text"]}</div>
+                                <div style="color:#94a3b8; font-size:0.82rem; line-height:1.5;">{c["chunk"]["text"]}</div>
                             </div>
                             """,
                             unsafe_allow_html=True
